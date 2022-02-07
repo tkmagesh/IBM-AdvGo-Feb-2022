@@ -36,7 +36,11 @@ Higher Order Functions
         3. Functions can be returned by other functions
         4. Closures
 
-
+Goroutines
+    1. Go routines are lightweight threads of execution
+    2. 4KB of stack space
+    3. Go runtine has a builtin scheduler
+    4. 'go' keyword
 
 
 
