@@ -56,6 +56,10 @@ Goroutines
             val := <- ch
             receiving data from the channel is a blocking operation
 
+    Never assume during Concurrency programming
+        1. Time taken for a goroutine to complete
+        2. Sequence of execution of goroutines
+
 
 
 
