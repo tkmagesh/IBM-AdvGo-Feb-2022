@@ -42,5 +42,20 @@ Goroutines
     3. Go runtine has a builtin scheduler
     4. 'go' keyword
 
+    Channels
+        ch := make(chan int)
+
+        sending data to the channel
+            ch <- 10
+            blocking operation?
+                it depends...
+                    if a read operation on the channel is not initiated yet, then the write operation will be blocked
+                    If the channel is a buffered channel and the channel is full, then the write operation will be blocked
+
+        receiving data from the channel
+            val := <- ch
+            receiving data from the channel is a blocking operation
+
+
 
 
