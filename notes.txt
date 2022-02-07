@@ -11,3 +11,32 @@ Methodoly:
     Hands on driven
     No powerpoints
 
+About You:
+    Name
+    Total Experience
+    Primary skillset
+    Experience in Golang
+    Any interesting books / shows you read / watched recently
+
+Go ?
+    1. Concurrency
+    2. Implicit implementation of interfaces
+    3. Standard library
+    4. Simplicity (only 25 keywords)
+    5. Easy to unit test, inbuilt testing framework
+    6. Compiling to native code
+    7. Performance compared to C
+    8. Higher Order Functions
+    9. Built in Garbage Collection
+
+Higher Order Functions
+    Functions are treated as data
+        1. Functions can be assigned to variables
+        2. Functions can be passed as arguments to other functions
+        3. Functions can be returned by other functions
+        4. Closures
+
+
+
+
+
