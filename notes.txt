@@ -61,5 +61,65 @@ Goroutines
         2. Sequence of execution of goroutines
 
 
+RPC
+    Remote Procedure Call
+        .NET Remoting
+        Java RMI
 
+    Web Services
+    REST Services
+
+Read Only
+Read (99%) + Append & Update (1%)
+Analytical 
+Real time
+
+
+Relational Databases are optimized for transactions
+    Maintain the integrity of the data when they are UPDATED
+
+
+Service?
+    Operations?
+    Messages?
+
+protocol buffers
+    Serialization
+
+Raw = 56
+XML = ~5 times
+JSON = 3 times
+
+P101,Pen,10,100,Stationary
+P102,Pencil,20,200,Stationary
+
+GRPC
+    http2 (formerly SPDY)
+
+    Communication Patterns
+        Request & Response
+        Server Streaming (one request & multiple responses)
+        Client Streaming (multiple requests & one response)
+        Bidirectional Streaming (multiple requests & multiple responses)
+
+Steps
+    1. Define the contract (service, operation, message (input & output)) (using protobuf)
+    2. Generate the proxy & stub
+    3. Implement the service & host the server (server-side)
+    4. Use the proxy to call the server (client-side)
+
+Tools:
+    
+    Installation
+        go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+        go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+        (when the above is installed, executables are created in the gopath/bin folder. Make sure this path is set in environment variables)
+
+    Windows
+        Install the binaries from https://github.com/protocolbuffers/protobuf/releases/
+
+    Mac
+        brew install protoc-gen-go
+        brew install protoc-gen-go-grpc
 
