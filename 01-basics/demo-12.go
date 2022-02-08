@@ -47,12 +47,12 @@ func (mwg *MyWaitGroup) Wait() {
 }
 
 var invocationCount = 0
-var wg MyWaitGroup
+var wg = NewMyWaitGroup()
 var mutex sync.Mutex
 
 func main() {
+	wg.Add(200)
 	for i := 0; i < 100; i++ {
-		wg.Add(1)
 		go fn()
 	}
 	wg.Wait()
