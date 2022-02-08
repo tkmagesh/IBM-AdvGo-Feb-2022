@@ -34,6 +34,20 @@ message AverageResponse{
     int32 result=1;
 }
 
+/* Bidirectional streaming */
+message UserName{
+    string firstName = 1;
+    string lastName = 2;
+}
+
+message GreetRequest{
+    UserName user = 1;
+}
+
+message GreetResponse{
+    string greeting = 1;
+}
+
 /* service contract */
 service AppService{
 
@@ -47,5 +61,8 @@ service AppService{
 
     /* client streaming */
     rpc CalculateAverage(stream AverageRequest) returns (AverageResponse);
+
+    /* bidirectional streaming */
+    rpc GreetEveryone(stream GreetRequest) returns (stream GreetResponse);
 }
 

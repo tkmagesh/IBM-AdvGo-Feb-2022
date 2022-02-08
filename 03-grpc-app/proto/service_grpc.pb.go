@@ -28,6 +28,8 @@ type AppServiceClient interface {
 	GeneratePrimes(ctx context.Context, in *PrimeRequest, opts ...grpc.CallOption) (AppService_GeneratePrimesClient, error)
 	// client streaming
 	CalculateAverage(ctx context.Context, opts ...grpc.CallOption) (AppService_CalculateAverageClient, error)
+	// bidirectional streaming
+	GreetEveryone(ctx context.Context, opts ...grpc.CallOption) (AppService_GreetEveryoneClient, error)
 }
 
 type appServiceClient struct {
@@ -113,6 +115,37 @@ func (x *appServiceCalculateAverageClient) CloseAndRecv() (*AverageResponse, err
 	return m, nil
 }
 
+func (c *appServiceClient) GreetEveryone(ctx context.Context, opts ...grpc.CallOption) (AppService_GreetEveryoneClient, error) {
+	stream, err := c.cc.NewStream(ctx, &AppService_ServiceDesc.Streams[2], "/proto.AppService/GreetEveryone", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &appServiceGreetEveryoneClient{stream}
+	return x, nil
+}
+
+type AppService_GreetEveryoneClient interface {
+	Send(*GreetRequest) error
+	Recv() (*GreetResponse, error)
+	grpc.ClientStream
+}
+
+type appServiceGreetEveryoneClient struct {
+	grpc.ClientStream
+}
+
+func (x *appServiceGreetEveryoneClient) Send(m *GreetRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *appServiceGreetEveryoneClient) Recv() (*GreetResponse, error) {
+	m := new(GreetResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // AppServiceServer is the server API for AppService service.
 // All implementations must embed UnimplementedAppServiceServer
 // for forward compatibility
@@ -123,6 +156,8 @@ type AppServiceServer interface {
 	GeneratePrimes(*PrimeRequest, AppService_GeneratePrimesServer) error
 	// client streaming
 	CalculateAverage(AppService_CalculateAverageServer) error
+	// bidirectional streaming
+	GreetEveryone(AppService_GreetEveryoneServer) error
 	mustEmbedUnimplementedAppServiceServer()
 }
 
@@ -138,6 +173,9 @@ func (UnimplementedAppServiceServer) GeneratePrimes(*PrimeRequest, AppService_Ge
 }
 func (UnimplementedAppServiceServer) CalculateAverage(AppService_CalculateAverageServer) error {
 	return status.Errorf(codes.Unimplemented, "method CalculateAverage not implemented")
+}
+func (UnimplementedAppServiceServer) GreetEveryone(AppService_GreetEveryoneServer) error {
+	return status.Errorf(codes.Unimplemented, "method GreetEveryone not implemented")
 }
 func (UnimplementedAppServiceServer) mustEmbedUnimplementedAppServiceServer() {}
 
@@ -217,6 +255,32 @@ func (x *appServiceCalculateAverageServer) Recv() (*AverageRequest, error) {
 	return m, nil
 }
 
+func _AppService_GreetEveryone_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(AppServiceServer).GreetEveryone(&appServiceGreetEveryoneServer{stream})
+}
+
+type AppService_GreetEveryoneServer interface {
+	Send(*GreetResponse) error
+	Recv() (*GreetRequest, error)
+	grpc.ServerStream
+}
+
+type appServiceGreetEveryoneServer struct {
+	grpc.ServerStream
+}
+
+func (x *appServiceGreetEveryoneServer) Send(m *GreetResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *appServiceGreetEveryoneServer) Recv() (*GreetRequest, error) {
+	m := new(GreetRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // AppService_ServiceDesc is the grpc.ServiceDesc for AppService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,6 +302,12 @@ var AppService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "CalculateAverage",
 			Handler:       _AppService_CalculateAverage_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "GreetEveryone",
+			Handler:       _AppService_GreetEveryone_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},
