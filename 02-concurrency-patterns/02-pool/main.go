@@ -2,35 +2,13 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"math/rand"
+	"pool-demo/db"
 	"pool-demo/pool"
 	"sync"
 	"time"
 )
-
-//resource
-type DBConnection struct {
-	ID int
-}
-
-//implements the io.Closer interface
-func (c *DBConnection) Close() error {
-	fmt.Printf("Closing Resource # %d\n", c.ID)
-	return nil
-}
-
-var DBConnectionFactory = func() func() (io.Closer, error) {
-	var IDCounter int
-
-	DBConnectionFactory := func() (io.Closer, error) {
-		IDCounter++
-		fmt.Printf("DBConnectionFactory : Creating resource # %d\n", IDCounter)
-		return &DBConnection{ID: IDCounter}, nil
-	}
-	return DBConnectionFactory
-}()
 
 func main() {
 
@@ -58,7 +36,7 @@ func main() {
 		//the same resource should be given to another client until it is released
 	*/
 
-	p, err := pool.New(DBConnectionFactory, 5 /* pool size */)
+	p, err := pool.New(db.DBConnectionFactory, 5 /* pool size */)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -95,7 +73,7 @@ func doWork(id int, p *pool.Pool) {
 		log.Fatalln(err)
 	}
 	defer p.Release(conn)
-	fmt.Printf("Worker : %d, Acquired %d:\n", id, conn.(*DBConnection).ID)
+	fmt.Printf("Worker : %d, Acquired %d:\n", id, conn.(*db.DBConnection).ID)
 	time.Sleep(time.Duration(rand.Intn(1000)) * time.Microsecond)
-	fmt.Printf("Worker Done : %d, Releasing %d:\n", id, conn.(*DBConnection).ID)
+	fmt.Printf("Worker Done : %d, Releasing %d:\n", id, conn.(*db.DBConnection).ID)
 }
