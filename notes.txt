@@ -138,3 +138,20 @@ Http Services
 
 
 https://github.com/notaryproject/notary
+
+
+Server Sent Events (http)
+    Headers from server
+        content-type : 'text/event-stream'
+        connection : 'keep-alive'
+
+    Messages from the server
+        event:<event_name>\n
+        data:<data>\n\n
+
+Web Sockets (ws) (on http)
+
+Code Generation
+    AST
+    Reflection
+    Templates
