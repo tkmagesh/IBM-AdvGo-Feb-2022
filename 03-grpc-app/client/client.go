@@ -10,7 +10,9 @@ import (
 	"grpc-app/proto"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 )
 
 func main() {
@@ -26,7 +28,8 @@ func main() {
 	//doRequestResponse(ctx, client)
 	//doServerStreaming(ctx, client)
 	//doClientStreaming(ctx, client)
-	doBidirectionalStreaming(ctx, client)
+	//doBidirectionalStreaming(ctx, client)
+	doRequestResponseWithTimeout(ctx, client)
 }
 
 func doRequestResponse(ctx context.Context, client proto.AppServiceClient) {
@@ -141,4 +144,24 @@ func doBidirectionalStreaming(ctx context.Context, client proto.AppServiceClient
 	}
 
 	<-done
+}
+
+func doRequestResponseWithTimeout(ctx context.Context, client proto.AppServiceClient) {
+	timeoutCtx, cancel := context.WithTimeout(ctx, 500*time.Millisecond)
+	defer cancel()
+	addRequest := &proto.AddRequest{
+		X: 100,
+		Y: 200,
+	}
+	res, err := client.Add(timeoutCtx, addRequest)
+	if err != nil {
+		statusErr, ok := status.FromError(err)
+		if ok && statusErr.Code() == codes.DeadlineExceeded {
+			fmt.Println("Timeout occurred")
+		} else {
+			log.Fatalln(err)
+		}
+		log.Fatalln(err)
+	}
+	fmt.Println(res.GetResult())
 }

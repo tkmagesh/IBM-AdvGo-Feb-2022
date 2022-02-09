@@ -17,6 +17,7 @@ type appServer struct {
 }
 
 func (s *appServer) Add(ctx context.Context, req *proto.AddRequest) (*proto.AddResponse, error) {
+	time.Sleep(2 * time.Second)
 	x := req.GetX()
 	y := req.GetY()
 	result := x + y
@@ -109,4 +110,5 @@ func main() {
 	grpcServer := grpc.NewServer()
 	proto.RegisterAppServiceServer(grpcServer, s)
 	grpcServer.Serve(listener)
+
 }
