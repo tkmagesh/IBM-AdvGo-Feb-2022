@@ -155,3 +155,5 @@ Code Generation
     AST
     Reflection
     Templates
+
+    go generate ./...
