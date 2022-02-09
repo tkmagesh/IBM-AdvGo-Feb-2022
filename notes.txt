@@ -213,3 +213,6 @@ Creating Memory profile
 
 To investigate memory allocations
     go tool pprof -alloc_objects <binary_name> <profile_file>
+
+
+https://www.youtube.com/watch?v=N3PWzBeLX2M&t=2073s
