@@ -153,7 +153,26 @@ Web Sockets (ws) (on http)
 
 Code Generation
     AST
+        https://yuroyoro.github.io/goast-viewer/index.html
     Reflection
     Templates
 
     go generate ./...
+
+Distributed Tracing
+    Tracing
+        Following the execution flow
+
+    Span
+        Unit of Work
+        Encapsulates Unique Identifier, operation name, start & finish timestamp, and any other contextual information (tags, logs or events)
+        Span can be nested
+            parent span Identifier
+
+    Trace
+        directed graph of spans where edges between the spans are defined as parent/child relationships
+
+    DistributedContext
+        Contains tracing identifiers, tags etc that are propogated from parent to child
+
+    
